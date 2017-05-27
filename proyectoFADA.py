@@ -5,21 +5,21 @@ import wx
 class panelProcedimientos(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
-        self.quote = wx.StaticText(self, label="Una label de texto estático", pos=(20, 30))
+        self.quote = wx.StaticText(self, label="integrantes: \n Erik López - 1430406 \n Camilo Jose Cruz - ... \n Robert Quiceno -...", pos=(10, 10))
 
-        self.logger = wx.TextCtrl(self, pos=(300,20), size=(200,300), style=wx.TE_MULTILINE | wx.TE_READONLY)
+        self.logger = wx.TextCtrl(self, pos=(300,20), size=(400,350), style=wx.TE_MULTILINE | wx.TE_READONLY)
 
         self.button =wx.Button(self, label="Guardar", pos=(200, 325))
         self.Bind(wx.EVT_BUTTON, self.OnClick,self.button)
 
-        self.lblname = wx.StaticText(self, label="Tu nombre :", pos=(20,60))
-        self.editname = wx.TextCtrl(self, value="", pos=(120, 60), size=(140,-1))
+        self.lblname = wx.StaticText(self, label="Numero de procedimientos :", pos=(10,100))
+        self.editname = wx.TextCtrl(self, value="", pos=(195, 100), size=(40,-1))
         self.Bind(wx.EVT_TEXT, self.EvtText, self.editname)
         self.Bind(wx.EVT_CHAR, self.EvtChar, self.editname)
 
         self.sampleList = ['Aburrido', 'Mola', 'Lo mejor', 'Alucinante']
-        self.lblhear = wx.StaticText(self, label="Qué te parece el programa :", pos=(20, 90))
-        self.edithear = wx.ComboBox(self, pos=(200, 90), size=(60, -1), choices=self.sampleList, style=wx.CB_DROPDOWN)
+        self.lblhear = wx.StaticText(self, label="Qué te parece el programa :", pos=(10, 150))
+        self.edithear = wx.ComboBox(self, pos=(200, 150), size=(70, -1), choices=self.sampleList, style=wx.CB_DROPDOWN)
         self.Bind(wx.EVT_COMBOBOX, self.EvtComboBox, self.edithear)
         self.Bind(wx.EVT_TEXT, self.EvtText,self.edithear)
 
@@ -58,7 +58,7 @@ class panelLibros(wx.Panel):
 
 app = wx.App(False)
 # Creamos el frame padre
-frame = wx.Frame(None, title="Proyecto de FADA", size=(600,600))
+frame = wx.Frame(None, title="Proyecto de FADA", size=(710,440))
 # Creamos el bloc de notas
 nb = wx.Notebook(frame)
 # Añadimos los paneles con Addpage
