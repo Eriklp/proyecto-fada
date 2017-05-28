@@ -2,6 +2,7 @@
 #-*- coding: latin-1 -*-
 import wx
 
+ListProc = [3 * 1]
 class panelProcedimientos(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
@@ -9,41 +10,42 @@ class panelProcedimientos(wx.Panel):
 
         self.logger = wx.TextCtrl(self, pos=(300,20), size=(400,350), style=wx.TE_MULTILINE | wx.TE_READONLY)
 
-        self.button =wx.Button(self, label="Guardar", pos=(200, 325))
-        self.Bind(wx.EVT_BUTTON, self.OnClick,self.button)
+        self.buttonOk =wx.Button(self, label="OK", pos=(240, 100), size = (50, 30))
+        self.Bind(wx.EVT_BUTTON, self.CLickOk, self.buttonOk)
 
-        self.lblname = wx.StaticText(self, label="Numero de procedimientos :", pos=(10,100))
-        self.editname = wx.TextCtrl(self, value="", pos=(195, 100), size=(40,-1))
-        self.Bind(wx.EVT_TEXT, self.EvtText, self.editname)
-        self.Bind(wx.EVT_CHAR, self.EvtChar, self.editname)
+        self.lblnum = wx.StaticText(self, label="Numero de procedimientos :", pos=(10,100))
+        self.numProc = wx.TextCtrl(self, value="", pos=(195, 100), size=(40,-1))
 
-        self.sampleList = ['Aburrido', 'Mola', 'Lo mejor', 'Alucinante']
-        self.lblhear = wx.StaticText(self, label="Qué te parece el programa :", pos=(10, 150))
-        self.edithear = wx.ComboBox(self, pos=(200, 150), size=(70, -1), choices=self.sampleList, style=wx.CB_DROPDOWN)
-        self.Bind(wx.EVT_COMBOBOX, self.EvtComboBox, self.edithear)
-        self.Bind(wx.EVT_TEXT, self.EvtText,self.edithear)
+        self.lblproc = wx.StaticText(self, label="Procedimiento # :", pos=(95, 140))
 
-        self.insure = wx.CheckBox(self, label="¿Quieres doble de queso en la pizza?", pos=(20,180))
-        self.Bind(wx.EVT_CHECKBOX, self.EvtCheckBox, self.insure)
+        self.lblnomproc = wx.StaticText(self, label = 'nombre: ', pos = (10, 160))
+        self.nomProc = wx.TextCtrl(self, value = '', pos = (10, 180), size = (120, -1))
+        self.lblhoraini = wx.StaticText(self, label = 'Hora inicio: ', pos = (135, 160))
+        self.horaini = wx.TextCtrl(self, value = '', pos = (135, 180), size = (75, -1))
+        self.lblhorafin = wx.StaticText(self, label = 'Hora fin: ', pos = (220, 160))
+        self.horafin = wx.TextCtrl(self, value = '', pos = (220, 180), size = (75, -1))
 
-        radioList = ['azul', 'rojo', 'amarillo', 'naranja', 'verde', 'lila', 'negro', 'gris']
-        rb = wx.RadioBox(self, label="¿Cuál es tu color favorito?", pos=(20, 210), choices=radioList,  majorDimension=3,
-                         style=wx.RA_SPECIFY_COLS)
-        self.Bind(wx.EVT_RADIOBOX, self.EvtRadioBox, rb)
+        self.buttonAgg = wx.Button(self, label = 'añadir', pos = (110, 210), size = (75, -1))
 
-    def EvtRadioBox(self, event):
-        self.logger.AppendText('Evento de radio box: %dn' % event.GetInt())
-    def EvtComboBox(self, event):
-        self.logger.AppendText('Evento de combo box: %sn' % event.GetString())
-    def OnClick(self,event):
-        self.logger.AppendText("Clic en el objeto con Id %dn" % event.GetId())
+        self.burronInge = wx.Button(self, label = 'Solucion Ingenua o Exhaustiva', pos = (45, 260))
+        self.burronInge = wx.Button(self, label = 'Solucion Voraz', pos = (95, 290))
+        self.burronInge = wx.Button(self, label = 'Solucion dinámica', pos = (85, 320))
+
+    def CLickOk(self,event):
+        numeroProcedimientos = int(self.numProc.GetValue())
+        ListProc = [range(3) for i in range(numeroProcedimientos)]
+        self.logger.SetValue("numero de procedimientos: " + str(numeroProcedimientos) + '\n')
+        infoProc = '[nomre_proc] \t [hora_ini] \t [hora_fin] \n'
+        for i in range(numeroProcedimientos):
+            for j in range(3):
+                #ListProc[i][j] = i*j
+                infoProc += str(ListProc[i][j]) +'\t'
+            infoProc += '\n'
+        self.logger.AppendText(infoProc)
+        self.lblproc.SetLabel('Procedimiento 0: ')
+
     def EvtText(self, event):
-        self.logger.AppendText('Evento de texto: %sn' % event.GetString())
-    def EvtChar(self, event):
-        self.logger.AppendText('Evento de carácter: %dn' % event.GetKeyCode())
-        event.Skip()
-    def EvtCheckBox(self, event):
-        self.logger.AppendText('Evento de check box: %dn' % event.Checked())
+        self.logger.AppendText('Evento de texto: ' + event.GetString() + '\n')
 
 class panelLibros(wx.Panel):
     def __init__(self, parent):
@@ -59,7 +61,7 @@ class panelLibros(wx.Panel):
 app = wx.App(False)
 # Creamos el frame padre
 frame = wx.Frame(None, title="Proyecto de FADA", size=(710,440))
-# Creamos el bloc de notas
+# Creamos el contenedor de pestañas
 nb = wx.Notebook(frame)
 # Añadimos los paneles con Addpage
 nb.AddPage(panelProcedimientos(nb), "Sala operaciones")
