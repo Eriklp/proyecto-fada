@@ -1,9 +1,13 @@
 #!/usr/bin/python
-#-*- coding: latin-1 -*-
+#-*- coding: utf-8 -*-
 import wx
+import time
 
-ListProc = [3 * 1]
+ListProc = []
+np = 0
+numeroProcedimientos = 0
 class panelProcedimientos(wx.Panel):
+
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
         self.quote = wx.StaticText(self, label="integrantes: \n Erik López - 1430406 \n Camilo Jose Cruz - ... \n Robert Quiceno -...", pos=(10, 10))
@@ -26,26 +30,56 @@ class panelProcedimientos(wx.Panel):
         self.horafin = wx.TextCtrl(self, value = '', pos = (220, 180), size = (75, -1))
 
         self.buttonAgg = wx.Button(self, label = 'añadir', pos = (110, 210), size = (75, -1))
+        self.Bind(wx.EVT_BUTTON, self.ClickAnadir, self.buttonAgg)
 
         self.burronInge = wx.Button(self, label = 'Solucion Ingenua o Exhaustiva', pos = (45, 260))
         self.burronInge = wx.Button(self, label = 'Solucion Voraz', pos = (95, 290))
         self.burronInge = wx.Button(self, label = 'Solucion dinámica', pos = (85, 320))
 
     def CLickOk(self,event):
+        global numeroProcedimientos
         numeroProcedimientos = int(self.numProc.GetValue())
+        global ListProc
         ListProc = [range(3) for i in range(numeroProcedimientos)]
         self.logger.SetValue("numero de procedimientos: " + str(numeroProcedimientos) + '\n')
-        infoProc = '[nomre_proc] \t [hora_ini] \t [hora_fin] \n'
-        for i in range(numeroProcedimientos):
-            for j in range(3):
-                #ListProc[i][j] = i*j
-                infoProc += str(ListProc[i][j]) +'\t'
-            infoProc += '\n'
-        self.logger.AppendText(infoProc)
-        self.lblproc.SetLabel('Procedimiento 0: ')
+        self.lblproc.SetLabel('Procedimiento: 0')
+        self.numProc.SetEditable(False)
 
-    def EvtText(self, event):
-        self.logger.AppendText('Evento de texto: ' + event.GetString() + '\n')
+    def ClickAnadir(self, event):
+        self.logger.AppendText('se añadio procedimiento: ')
+        global numeroProcedimientos
+        global np
+        print(numeroProcedimientos)
+        print(np)
+        if np < numeroProcedimientos:
+            nombre_tem = self.nomProc.GetValue()
+            horain_tem = self.horaini.GetValue()
+            horafin_tem = self.horafin.GetValue()
+            ListProc[np][0] = str(nombre_tem)
+            ListProc[np][1] = horain_tem + ''
+            ListProc[np][2] = horafin_tem + ''
+            self.logger.AppendText('' + ListProc[np][0] + '\n hora inicio: ' + ListProc[np][1] + '\n hora fin : ' + ListProc[np][2] + '\n' )
+            infoProc = '[nomre_proc] \t [hora_ini] \t [hora_fin] \n'
+            for i in range(numeroProcedimientos):
+                for j in range(3):
+                    infoProc += str(ListProc[i][j]) +'\t'
+                infoProc += '\n'
+            self.logger.AppendText(infoProc)
+            self.nomProc.SetValue('')
+            self.horaini.SetValue('')
+            self.horafin.SetValue('')
+            np += 1
+            if np != numeroProcedimientos:
+                self.lblproc.SetLabel('Procedimiento: ' + str(np))
+            elif np == numeroProcedimientos:
+                msj = wx.MessageDialog(self, 'ya lleno todos los procedimientos!', 'holi', style = wx.OK)
+                msj.ShowModal()
+                self.lblproc.SetLabel('Procedimientos: ' + str(numeroProcedimientos))
+                self.nomProc.SetEditable(False)
+                self.horaini.SetEditable(False)
+                self.horafin.SetEditable(False)
+                self.buttonAgg.Disable()
+                self.buttonOk.Disable()
 
 class panelLibros(wx.Panel):
     def __init__(self, parent):
