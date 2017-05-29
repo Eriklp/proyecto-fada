@@ -46,23 +46,24 @@ class panelProcedimientos(wx.Panel):
         self.numProc.SetEditable(False)
 
     def ClickAnadir(self, event):
-        self.logger.AppendText('se añadio procedimiento: ')
         global numeroProcedimientos
         global np
-        print(numeroProcedimientos)
-        print(np)
         if np < numeroProcedimientos:
             nombre_tem = self.nomProc.GetValue()
-            horain_tem = self.horaini.GetValue()
-            horafin_tem = self.horafin.GetValue()
+            horain_tem = time.strptime(self.horaini.GetValue(), "%H:%M")
+            horafin_tem = time.strptime(self.horafin.GetValue(), "%H:%M")
             ListProc[np][0] = str(nombre_tem)
-            ListProc[np][1] = horain_tem + ''
-            ListProc[np][2] = horafin_tem + ''
-            self.logger.AppendText('' + ListProc[np][0] + '\n hora inicio: ' + ListProc[np][1] + '\n hora fin : ' + ListProc[np][2] + '\n' )
-            infoProc = '[nomre_proc] \t [hora_ini] \t [hora_fin] \n'
-            for i in range(numeroProcedimientos):
+            ListProc[np][1] = horain_tem
+            ListProc[np][2] = horafin_tem
+            self.logger.SetValue('Se añadio el procedimiento: ' + ListProc[np][0] + '\nhora inicio: ' + str(ListProc[np][1].tm_hour) +':'+str(ListProc[np][1].tm_min) + '\nhora fin : ' + str(ListProc[np][2].tm_hour) + ':' + str(ListProc[np][1].tm_min) +'\n' )
+            infoProc = '[nombre_proc] \t [hora_ini] \t [hora_fin] \n'
+            for i in range(np + 1):
                 for j in range(3):
-                    infoProc += str(ListProc[i][j]) +'\t'
+                    if j == 0:
+                        infoProc += str(ListProc[i][j]) +'                      \t'
+                    else:
+                        infoProc += str(ListProc[i][j].tm_hour) + ':' + str(ListProc[i][j].tm_min) +'                \t'
+
                 infoProc += '\n'
             self.logger.AppendText(infoProc)
             self.nomProc.SetValue('')
