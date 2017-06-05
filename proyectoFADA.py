@@ -32,9 +32,15 @@ class panelProcedimientos(wx.Panel):
         self.buttonAgg = wx.Button(self, label = 'añadir', pos = (110, 210), size = (75, -1))
         self.Bind(wx.EVT_BUTTON, self.ClickAnadir, self.buttonAgg)
 
-        self.burronInge = wx.Button(self, label = 'Solucion Ingenua o Exhaustiva', pos = (45, 260))
-        self.burronInge = wx.Button(self, label = 'Solucion Voraz', pos = (95, 290))
-        self.burronInge = wx.Button(self, label = 'Solucion dinámica', pos = (85, 320))
+        self.buttonInge = wx.Button(self, label = 'Solucion Ingenua o Exhaustiva', pos = (45, 260))
+        self.Bind(wx.EVT_BUTTON, self.ClickIngenuo, self.buttonInge)
+        self.buttonInge.Disable()
+        self.buttonVor = wx.Button(self, label = 'Solucion Voraz', pos = (95, 290))
+        self.Bind(wx.EVT_BUTTON, self.CLickVoraz, self.buttonVor)
+        self.buttonVor.Disable()
+        self.buttonDim = wx.Button(self, label = 'Solucion dinámica', pos = (85, 320))
+        self.Bind(wx.EVT_BUTTON, self.ClickDinamico, self.buttonDim)
+        self.buttonDim.Disable()
 
     def CLickOk(self,event):
         global numeroProcedimientos
@@ -81,6 +87,16 @@ class panelProcedimientos(wx.Panel):
                 self.horafin.SetEditable(False)
                 self.buttonAgg.Disable()
                 self.buttonOk.Disable()
+                self.buttonInge.Enable()
+                self.buttonVor.Enable()
+                self.buttonDim.Enable()
+    def ClickIngenuo(self, event):
+        self.logger.SetValue('hola')
+    def CLickVoraz(self, event):
+        self.logger.SetValue('Hola, aqui va la solucion voraz del problema')
+    def ClickDinamico(self,event):
+        self.logger.SetValue('Hola, aqui va la solucion dinamica del problema')
+
 
 class panelLibros(wx.Panel):
     def __init__(self, parent):
