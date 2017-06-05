@@ -3,9 +3,9 @@
 import wx
 import time
 
-ListProc = []
 np = 0
 numeroProcedimientos = 0
+ListProc = []
 class panelProcedimientos(wx.Panel):
 
     def __init__(self, parent):
@@ -38,10 +38,26 @@ class panelProcedimientos(wx.Panel):
         self.buttonVor = wx.Button(self, label = 'Solucion Voraz', pos = (95, 290))
         self.Bind(wx.EVT_BUTTON, self.CLickVoraz, self.buttonVor)
         self.buttonVor.Disable()
-        self.buttonDim = wx.Button(self, label = 'Solucion dinámica', pos = (85, 320))
+        self.buttonDim = wx.Button(self, label = 'Solucion Dinámica', pos = (85, 320))
         self.Bind(wx.EVT_BUTTON, self.ClickDinamico, self.buttonDim)
         self.buttonDim.Disable()
 
+        #parte de abrir archivos ¬¬
+        self.buttonArchivo = wx.Button(self, label = 'archivo', pos = (8, 132))
+        self.Bind(wx.EVT_BUTTON, self.ClickArchivo, self.buttonArchivo)
+        #fin de parte de abrir archivo ¬¬
+    def ClickArchivo(self, event):
+        archivo = open("procedimientos.txt", "r")
+        linea1 = archivo.readline()
+        global numeroProcedimientos
+        numeroProcedimientos = int(linea1)
+        lineas = archivo.readlines()
+        global ListProc
+        for i  in range(0, len(lineas)):
+            lin = lineas[i].split()
+            ListProc[i][0] = lin[0]
+            ListProc[i][1] = lin[1]
+            ListProc[i][2] = lin[2]
     def CLickOk(self,event):
         global numeroProcedimientos
         numeroProcedimientos = int(self.numProc.GetValue())
@@ -50,7 +66,6 @@ class panelProcedimientos(wx.Panel):
         self.logger.SetValue("numero de procedimientos: " + str(numeroProcedimientos) + '\n')
         self.lblproc.SetLabel('Procedimiento: 0')
         self.numProc.SetEditable(False)
-
     def ClickAnadir(self, event):
         global numeroProcedimientos
         global np
@@ -91,7 +106,17 @@ class panelProcedimientos(wx.Panel):
                 self.buttonVor.Enable()
                 self.buttonDim.Enable()
     def ClickIngenuo(self, event):
-        self.logger.SetValue('hola')
+        self.logger.SetValue('solucion ingenua: ')
+        infoProc = '[nombre_proc] \t [hora_ini] \t [hora_fin] \n'
+        for i in range(numeroProcedimientos):
+            for j in range(3):
+                if j == 0:
+                    infoProc += str(ListProc[i][j]) +'                      \t'
+                else:
+                    infoProc += str(ListProc[i][j].tm_hour) + ':' + str(ListProc[i][j].tm_min) +'                \t'
+
+            infoProc += '\n'
+        self.logger.AppendText(infoProc)
     def CLickVoraz(self, event):
         self.logger.SetValue('Hola, aqui va la solucion voraz del problema')
     def ClickDinamico(self,event):
