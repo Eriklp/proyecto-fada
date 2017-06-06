@@ -6,8 +6,11 @@ import time
 np = 0
 numeroProcedimientos = 0
 ListProc = []
-class panelProcedimientos(wx.Panel):
+def HorasAminutos(hora, minutos):
+    resultado = (hora * 60) + minutos
+    return resultado
 
+class panelProcedimientos(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
         self.quote = wx.StaticText(self, label="integrantes: \n Erik López - 1430406 \n Camilo Jose Cruz - ... \n Robert Quiceno -...", pos=(10, 10))
@@ -64,6 +67,11 @@ class panelProcedimientos(wx.Panel):
         self.buttonInge.Enable()
         self.buttonVor.Enable()
         self.buttonDim.Enable()
+        self.buttonAgg.Disable()
+        self.buttonOk.Disable()
+        self.numProc.SetValue(str(numeroProcedimientos))
+        self.numProc.SetEditable(False)
+        self.numProc.Disable()
     def CLickOk(self,event):
         global numeroProcedimientos
         numeroProcedimientos = int(self.numProc.GetValue())
@@ -89,7 +97,7 @@ class panelProcedimientos(wx.Panel):
                     if j == 0:
                         infoProc += str(ListProc[i][j]) +'                      \t'
                     else:
-                        infoProc += str(ListProc[i][j].tm_hour) + ':' + str(ListProc[i][j].tm_min) +'                \t'
+                        infoProc += str(ListProc[i][j].tm_hour) + ':' + str(ListProc[i][j].tm_min) +'             \t'
 
                 infoProc += '\n'
             self.logger.AppendText(infoProc)
@@ -119,15 +127,29 @@ class panelProcedimientos(wx.Panel):
                 if j == 0:
                     infoProc += str(ListProc[i][j]) +'                      \t'
                 else:
-                    infoProc += str(ListProc[i][j].tm_hour) + ':' + str(ListProc[i][j].tm_min) +'                \t'
-
+                    infoProc += str(ListProc[i][j].tm_hour) + ':' + str(ListProc[i][j].tm_min) +'             \t'
             infoProc += '\n'
         self.logger.AppendText(infoProc)
+        listaDePesos = []
+        for i in range(numeroProcedimientos):
+            peso = HorasAminutos(ListProc[i][2].tm_hour, ListProc[i][2].tm_min) - HorasAminutos(ListProc[i][1].tm_hour, ListProc[i][1].tm_min)
+            listaDePesos.append(peso)
+        print(listaDePesos)
+        ProcedimientosARealizar = []
+        sum = 0
+        while sum < 1440:
+            min = min(listaDePesos)
+            ind = listaDePesos.index(min)
+            sum = sum + min
+            ProcedimientosARealizar.append(ListProc[ind])
+            ListProc.remove(ListProc[ind])
+            listaDePesos.remove(min)
+        for i in range(len())
+
     def CLickVoraz(self, event):
         self.logger.SetValue('Hola, aqui va la solucion voraz del problema')
     def ClickDinamico(self,event):
         self.logger.SetValue('Hola, aqui va la solucion dinamica del problema')
-
 
 class panelLibros(wx.Panel):
     def __init__(self, parent):
