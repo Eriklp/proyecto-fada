@@ -53,11 +53,17 @@ class panelProcedimientos(wx.Panel):
         numeroProcedimientos = int(linea1)
         lineas = archivo.readlines()
         global ListProc
-        for i  in range(0, len(lineas)):
-            lin = lineas[i].split()
-            ListProc[i][0] = lin[0]
-            ListProc[i][1] = lin[1]
-            ListProc[i][2] = lin[2]
+        for i  in range(0, len(lineas), 1):
+            lin = lineas[i].split(' ')
+            ListProc.append(lin)
+        for i in range(numeroProcedimientos):
+            ListProc[i][2] = ListProc[i][2].replace('\n', '')
+        for i in range(numeroProcedimientos):
+            for j in range(1, 3):
+                ListProc[i][j] = time.strptime(ListProc[i][j], "%H:%M")
+        self.buttonInge.Enable()
+        self.buttonVor.Enable()
+        self.buttonDim.Enable()
     def CLickOk(self,event):
         global numeroProcedimientos
         numeroProcedimientos = int(self.numProc.GetValue())
@@ -94,7 +100,7 @@ class panelProcedimientos(wx.Panel):
             if np != numeroProcedimientos:
                 self.lblproc.SetLabel('Procedimiento: ' + str(np))
             elif np == numeroProcedimientos:
-                msj = wx.MessageDialog(self, 'ya lleno todos los procedimientos!', 'holi', style = wx.OK)
+                msj = wx.MessageDialog(self, 'ya lleno todos los procedimientos!', 'Proyecto', style = wx.OK)
                 msj.ShowModal()
                 self.lblproc.SetLabel('Procedimientos: ' + str(numeroProcedimientos))
                 self.nomProc.SetEditable(False)
@@ -106,7 +112,7 @@ class panelProcedimientos(wx.Panel):
                 self.buttonVor.Enable()
                 self.buttonDim.Enable()
     def ClickIngenuo(self, event):
-        self.logger.SetValue('solucion ingenua: ')
+        self.logger.SetValue('solucion ingenua: \n')
         infoProc = '[nombre_proc] \t [hora_ini] \t [hora_fin] \n'
         for i in range(numeroProcedimientos):
             for j in range(3):
