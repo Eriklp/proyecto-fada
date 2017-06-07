@@ -137,14 +137,16 @@ class panelProcedimientos(wx.Panel):
         print(listaDePesos)
         ProcedimientosARealizar = []
         sum = 0
+        ##minn = 0
         while sum < 1440:
-            min = min(listaDePesos)
-            ind = listaDePesos.index(min)
-            sum = sum + min
+            minn = min(listaDePesos)
+            ind = listaDePesos.index(minn)
+            sum = sum + minn
             ProcedimientosARealizar.append(ListProc[ind])
             ListProc.remove(ListProc[ind])
-            listaDePesos.remove(min)
-        for i in range(len())
+            listaDePesos.remove(minn)
+        for i in range(len(ProcedimientosARealizar)):
+            print(ProcedimientosARealizar[i])
 
     def CLickVoraz(self, event):
         self.logger.SetValue('Hola, aqui va la solucion voraz del problema')
