@@ -9,7 +9,19 @@ ListProc = []
 def HorasAminutos(hora, minutos):
     resultado = (hora * 60) + minutos
     return resultado
-
+def cruzan(proc1, proc2):
+    minHIproc1 = HorasAminutos(proc1[1].tm_hour, proc1[1].tm_min)
+    minHFproc1 = HorasAminutos(proc1[2].tm_hour, proc1[2].tm_min)
+    minHIproc2 = HorasAminutos(proc2[1].tm_hour, proc2[1].tm_min)
+    minHFproc2 = HorasAminutos(proc2[2].tm_hour, proc2[2].tm_min)
+    var = False
+    if minHFproc1 > minHIproc2:
+        var = True
+    elif minHIproc2 < minHFproc1:
+        var = True
+    else:
+        var = False
+    return var
 class panelProcedimientos(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
@@ -139,15 +151,21 @@ class panelProcedimientos(wx.Panel):
         sum = 0
         ##minn = 0
         while sum < 1440:
-            minn = min(listaDePesos)
-            ind = listaDePesos.index(minn)
-            sum = sum + minn
+            maxx = max(listaDePesos)
+            ind = listaDePesos.index(maxx)
+            sum = sum + maxx
             ProcedimientosARealizar.append(ListProc[ind])
             ListProc.remove(ListProc[ind])
-            listaDePesos.remove(minn)
+            listaDePesos.remove(maxx)
+        info = '[nombre_proc] \t [hora_ini] \t [hora_fin] \n'
         for i in range(len(ProcedimientosARealizar)):
-            print(ProcedimientosARealizar[i])
-
+            for j in range(3):
+                if j == 0:
+                    info += str(ProcedimientosARealizar[i][j]) +'                      \t'
+                else:
+                    info += str(ProcedimientosARealizar[i][j].tm_hour) + ':' + str(ProcedimientosARealizar[i][j].tm_min) +'             \t'
+            info += '\n'
+        self.logger.AppendText(info)
     def CLickVoraz(self, event):
         self.logger.SetValue('Hola, aqui va la solucion voraz del problema')
     def ClickDinamico(self,event):
@@ -186,7 +204,7 @@ class panelLibros(wx.Panel):
 	self.buttonInge.Enable()
 	self.buttonVor.Enable()
 	self.buttonDim.Enable()
-	
+
 
 
 
