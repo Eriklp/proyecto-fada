@@ -13,7 +13,7 @@ def HorasAminutos(hora, minutos):
 class panelProcedimientos(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
-        self.quote = wx.StaticText(self, label="integrantes: \n Erik López - 1430406 \n Camilo Jose Cruz - ... \n Robert Quiceno -...", pos=(10, 10))
+        self.quote = wx.StaticText(self, label="integrantes: \n Erik López - 1430406 \n Camilo Jose Cruz - 1428907 \n Robert Quiceno -...", pos=(10, 10))
 
         self.logger = wx.TextCtrl(self, pos=(300,20), size=(400,350), style=wx.TE_MULTILINE | wx.TE_READONLY)
 
@@ -156,21 +156,48 @@ class panelProcedimientos(wx.Panel):
 class panelLibros(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
-        self.control = wx.TextCtrl(self, style=wx.TE_MULTILINE)
 
-        # Creamos un sizer para ocupar todo el tamaño
-        self.sizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.sizer.Add(self.control,1, wx.EXPAND)
-        self.SetSizer(self.sizer)
+        self.logger = wx.TextCtrl(self, pos=(260,20), size=(450,400), style=wx.TE_MULTILINE | wx.TE_READONLY)
+
+        self.buttonCargar =wx.Button(self, label="Cargar Archivo", pos=(20, 20), size = (120, 30))
+        self.Bind(wx.EVT_BUTTON, self.ClickCargar, self.buttonCargar)
+
+	self.buttonInge = wx.Button(self, label = 'Solucion Ingenua o Exhaustiva', pos = (45, 260))
+        self.Bind(wx.EVT_BUTTON, self.ClickIngenuo, self.buttonInge)
+        self.buttonInge.Disable()
+        self.buttonVor = wx.Button(self, label = 'Solucion Voraz', pos = (95, 300))
+        self.Bind(wx.EVT_BUTTON, self.CLickVoraz, self.buttonVor)
+        self.buttonVor.Disable()
+        self.buttonDim = wx.Button(self, label = 'Solucion Dinámica', pos = (85, 340))
+        self.Bind(wx.EVT_BUTTON, self.ClickDinamico, self.buttonDim)
+        self.buttonDim.Disable()
+
+
+    def ClickIngenuo(self,event):
+	self.logger.SetValue('Se mostrara la solucion ingenua del problema')
+    def CLickVoraz(self,event):
+	self.logger.SetValue('Se mostrara la solucion voraz del problema')
+    def ClickDinamico(self,event):
+	self.logger.SetValue('Se mostrara la solucion dinamica del problema')
+
+
+    def ClickCargar(self,event):
+	self.logger.SetValue('Se mostrara la informacion del archivo')
+	self.buttonInge.Enable()
+	self.buttonVor.Enable()
+	self.buttonDim.Enable()
+	
+
 
 
 app = wx.App(False)
 # Creamos el frame padre
-frame = wx.Frame(None, title="Proyecto de FADA", size=(710,440))
+frame = wx.Frame(None, title="Proyecto de FADA", size=(780,520))
 # Creamos el contenedor de pestañas
 nb = wx.Notebook(frame)
 # Añadimos los paneles con Addpage
-nb.AddPage(panelProcedimientos(nb), "Sala operaciones")
 nb.AddPage(panelLibros(nb), "Copia de libros")
+nb.AddPage(panelProcedimientos(nb), "Sala operaciones")
+
 frame.Show()
 app.MainLoop()
