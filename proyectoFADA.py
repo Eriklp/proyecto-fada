@@ -149,14 +149,28 @@ class panelProcedimientos(wx.Panel):
         print(listaDePesos)
         ProcedimientosARealizar = []
         sum = 0
-        ##minn = 0
+        maxx = 0
         while sum < 1440:
-            maxx = max(listaDePesos)
-            ind = listaDePesos.index(maxx)
-            sum = sum + maxx
-            ProcedimientosARealizar.append(ListProc[ind])
-            ListProc.remove(ListProc[ind])
-            listaDePesos.remove(maxx)
+            if sum == 0:
+                maxx = max(listaDePesos)
+                ind = listaDePesos.index(maxx)
+                ProcedimientosARealizar.append(ListProc[ind])
+                ListProc.remove(ListProc[ind])
+                listaDePesos.remove(maxx)
+                sum = sum + maxx
+            else:
+                print(str(sum) + "else")
+                maxx = max(listaDePesos)
+                ind = listaDePesos.index(maxx)
+                if not cruzan(ListProc[ind], ProcedimientosARealizar[len(ProcedimientosARealizar) - 1]):
+                    print(str(sum) + "if not")
+                    ProcedimientosARealizar.append(ListProc[ind])
+                    ListProc.remove(ListProc[ind])
+                    listaDePesos.remove(maxx)
+                    sum = sum + maxx
+                listaDePesos.remove(maxx)
+
+            #print(HorasAminutos(ProcedimientosARealizar[i][1].tm_hour, ProcedimientosARealizar[i][1].tm_min))
         info = '[nombre_proc] \t [hora_ini] \t [hora_fin] \n'
         for i in range(len(ProcedimientosARealizar)):
             for j in range(3):
