@@ -148,27 +148,59 @@ class panelProcedimientos(wx.Panel):
             listaDePesos.append(peso)
         print(listaDePesos)
         ProcedimientosARealizar = []
+        arregloauxconlogica = []
         sum = 0
         maxx = 0
-        while sum < 1440:
+        while len(ListProc)>0:
+            print(sum)
             if sum == 0:
+                print(sum)
                 maxx = max(listaDePesos)
                 ind = listaDePesos.index(maxx)
                 ProcedimientosARealizar.append(ListProc[ind])
                 ListProc.remove(ListProc[ind])
                 listaDePesos.remove(maxx)
                 sum = sum + maxx
-            else:
-                print(str(sum) + "else")
+
+            #for i in range(len(listaDePesos)):
+            #    if HorasAminutos(ListProc[i][2].tm_hour, ListProc[i][2].tm_min) <= HorasAminutos(ListProc[ind][1].tm_hour, ListProc[ind][1].tm_min) :
+            #        ind = listaDePesos.index(HorasAminutos(ListProc[i][2].tm_hour, ListProc[i][2].tm_min) - HorasAminutos(ListProc[i][1].tm_hour, ListProc[i][1].tm_min))
+            #        ProcedimientosARealizar.append(ListProc[ind])
+            #        ListProc.remove(ListProc[i])
+            #        listaDePesos.remove(HorasAminutos(ListProc[i][2].tm_hour, ListProc[i][2].tm_min) - HorasAminutos(ListProc[i][1].tm_hour, ListProc[i][1].tm_min))
+
+            #for i in range(len(listaDePesos)):
+            #    if HorasAminutos(ListProc[i][2].tm_hour, ListProc[i][2].tm_min) <= HorasAminutos(ListProc[ind][2].tm_hour, ListProc[ind][2].tm_min) :
+            #        ind = listaDePesos.index(HorasAminutos(ListProc[i][2].tm_hour, ListProc[i][2].tm_min) - HorasAminutos(ListProc[i][1].tm_hour, ListProc[i][1].tm_min))
+            #        ProcedimientosARealizar.append(ListProc[ind])
+            #        ListProc.remove(ListProc[i])
+            #        listaDePesos.remove(HorasAminutos(ListProc[i][2].tm_hour, ListProc[i][2].tm_min) - HorasAminutos(ListProc[i][1].tm_hour, ListProc[i][1].tm_min))
+
+
+
+            if sum > 0:
                 maxx = max(listaDePesos)
-                ind = listaDePesos.index(maxx)
-                if not cruzan(ListProc[ind], ProcedimientosARealizar[len(ProcedimientosARealizar) - 1]):
-                    print(str(sum) + "if not")
+
+                if sum + maxx > 1440:
+                    ind = listaDePesos.index(maxx)
+                    ListProc.remove(ListProc[ind])
+                    listaDePesos.remove(maxx)
+                    print(len(listaDePesos))
+                else  :
+                    ind = listaDePesos.index(maxx)
                     ProcedimientosARealizar.append(ListProc[ind])
                     ListProc.remove(ListProc[ind])
                     listaDePesos.remove(maxx)
                     sum = sum + maxx
-                listaDePesos.remove(maxx)
+
+            if cruzan(ListProc[ind], ProcedimientosARealizar[len(ProcedimientosARealizar) - 1]):
+                print(str(sum) + "cruzan")
+            else:
+                ProcedimientosARealizar.append(ListProc[ind])
+            #    ListProc.remove(ListProc[ind])
+            #    listaDePesos.remove(maxx)
+            #    sum = sum + maxx
+
 
             #print(HorasAminutos(ProcedimientosARealizar[i][1].tm_hour, ProcedimientosARealizar[i][1].tm_min))
         info = '[nombre_proc] \t [hora_ini] \t [hora_fin] \n'
