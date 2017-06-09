@@ -25,7 +25,7 @@ def cruzan(proc1, proc2):
 class panelProcedimientos(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
-        self.quote = wx.StaticText(self, label="integrantes: \n Erik López - 1430406 \n Camilo Jose Cruz - 1428907 \n Robert Quiceno -...", pos=(10, 10))
+        self.quote = wx.StaticText(self, label="integrantes: \n Erik López - 1430406 \n Camilo Jose Cruz - 1428907 \n Robert Quiceno - 1422913", pos=(10, 10))
 
         self.logger = wx.TextCtrl(self, pos=(300,20), size=(400,350), style=wx.TE_MULTILINE | wx.TE_READONLY)
 
