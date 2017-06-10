@@ -1,11 +1,10 @@
 3 9
 libro1 10
 libro2 20
-libro3 30 
+libro3 30
 libro4 40
 libro5 50
 libro6 60
 libro7 70
 libro8 80
-libro9 90	
-
+libro9 90

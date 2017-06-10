@@ -216,6 +216,11 @@ class panelProcedimientos(wx.Panel):
         self.logger.SetValue('Hola, aqui va la solucion voraz del problema')
     def ClickDinamico(self,event):
         self.logger.SetValue('Hola, aqui va la solucion dinamica del problema')
+"""
+SE DEFINEN LA INTERFAZ Y METODOS DEl PANEL LIBROS
+"""
+arrayPaginas=[]
+arrayNombres=[]
 
 class panelLibros(wx.Panel):
     def __init__(self, parent):
@@ -238,18 +243,37 @@ class panelLibros(wx.Panel):
 
 
     def ClickIngenuo(self,event):
-	self.logger.SetValue('Se mostrara la solucion ingenua del problema')
+	    self.logger.SetValue('Se mostrara la solucion ingenua del problema')
     def CLickVoraz(self,event):
-	self.logger.SetValue('Se mostrara la solucion voraz del problema')
+	    self.logger.SetValue('Se mostrara la solucion voraz del problema')
     def ClickDinamico(self,event):
-	self.logger.SetValue('Se mostrara la solucion dinamica del problema')
+	    self.logger.SetValue('Se mostrara la solucion dinamica del problema')
+
 
 
     def ClickCargar(self,event):
-	self.logger.SetValue('Se mostrara la informacion del archivo')
-	self.buttonInge.Enable()
-	self.buttonVor.Enable()
-	self.buttonDim.Enable()
+        archivo = open("infoLibros.txt","r")
+        linea1 = archivo.readline()
+        cantEscritores = linea1.split(" ")[0]
+        cantLibros = linea1.split(" ")[1]
+        global arrayPaginas
+        del arrayPaginas[:]
+        global arrayNombres
+        del arrayNombres[:]
+
+
+        for i in archivo.readlines():
+            arrayNombres.append(i.split(" ")[0])
+            arrayPaginas.append(int(i.split(" ")[1]))
+
+        carga = "La informción cargada es la siguiente:\nCantidad de Escritores: "+cantEscritores+"\nCantidad de Libros: "+ cantLibros
+
+        for i in range(0,len(arrayNombres)):
+            carga = carga + "Titulo del libro: " + arrayNombres[i] + "--Cantidad de paginas: "+ str(arrayPaginas[i])+"\n"
+        self.logger.SetValue(carga)
+        self.buttonInge.Enable()
+    	self.buttonVor.Enable()
+    	self.buttonDim.Enable()
 
 
 
