@@ -284,8 +284,7 @@ frame = wx.Frame(None, title="Proyecto de FADA", size=(780,520))
 # Creamos el contenedor de pestañas
 nb = wx.Notebook(frame)
 # Añadimos los paneles con Addpage
-nb.AddPage(panelLibros(nb), "Copia de libros")
 nb.AddPage(panelProcedimientos(nb), "Sala operaciones")
-
+nb.AddPage(panelLibros(nb), "Copia de libros")
 frame.Show()
 app.MainLoop()
