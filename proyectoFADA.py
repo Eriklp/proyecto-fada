@@ -51,7 +51,7 @@ class panelProcedimientos(wx.Panel):
         self.Bind(wx.EVT_BUTTON, self.ClickIngenuo, self.buttonInge)
         self.buttonInge.Disable()
         self.buttonVor = wx.Button(self, label = 'Solucion Voraz', pos = (95, 290))
-        self.Bind(wx.EVT_BUTTON, self.CLickVoraz, self.buttonVor)
+        self.Bind(wx.EVT_BUTTON, self.ClickVoraz, self.buttonVor)
         self.buttonVor.Disable()
         self.buttonDim = wx.Button(self, label = 'Solucion Dinámica', pos = (85, 320))
         self.Bind(wx.EVT_BUTTON, self.ClickDinamico, self.buttonDim)
@@ -133,6 +133,8 @@ class panelProcedimientos(wx.Panel):
                 self.buttonDim.Enable()
     def ClickIngenuo(self, event):
         self.logger.SetValue('solucion ingenua: \n')
+    def ClickVoraz(self, event):
+        self.logger.SetValue('solucion voraz: \n')
         infoProc = '[nombre_proc] \t [hora_ini] \t [hora_fin] \n'
         for i in range(numeroProcedimientos):
             for j in range(3):
@@ -151,8 +153,10 @@ class panelProcedimientos(wx.Panel):
         arregloauxconlogica = []
         sum = 0
         maxx = 0
-        while len(ListProc)>0:
+
+        while sum <= 1440 and len(listaDePesos)>0:
             print(sum)
+
             if sum == 0:
                 print(sum)
                 maxx = max(listaDePesos)
@@ -161,45 +165,18 @@ class panelProcedimientos(wx.Panel):
                 ListProc.remove(ListProc[ind])
                 listaDePesos.remove(maxx)
                 sum = sum + maxx
-
-            #for i in range(len(listaDePesos)):
-            #    if HorasAminutos(ListProc[i][2].tm_hour, ListProc[i][2].tm_min) <= HorasAminutos(ListProc[ind][1].tm_hour, ListProc[ind][1].tm_min) :
-            #        ind = listaDePesos.index(HorasAminutos(ListProc[i][2].tm_hour, ListProc[i][2].tm_min) - HorasAminutos(ListProc[i][1].tm_hour, ListProc[i][1].tm_min))
-            #        ProcedimientosARealizar.append(ListProc[ind])
-            #        ListProc.remove(ListProc[i])
-            #        listaDePesos.remove(HorasAminutos(ListProc[i][2].tm_hour, ListProc[i][2].tm_min) - HorasAminutos(ListProc[i][1].tm_hour, ListProc[i][1].tm_min))
-
-            #for i in range(len(listaDePesos)):
-            #    if HorasAminutos(ListProc[i][2].tm_hour, ListProc[i][2].tm_min) <= HorasAminutos(ListProc[ind][2].tm_hour, ListProc[ind][2].tm_min) :
-            #        ind = listaDePesos.index(HorasAminutos(ListProc[i][2].tm_hour, ListProc[i][2].tm_min) - HorasAminutos(ListProc[i][1].tm_hour, ListProc[i][1].tm_min))
-            #        ProcedimientosARealizar.append(ListProc[ind])
-            #        ListProc.remove(ListProc[i])
-            #        listaDePesos.remove(HorasAminutos(ListProc[i][2].tm_hour, ListProc[i][2].tm_min) - HorasAminutos(ListProc[i][1].tm_hour, ListProc[i][1].tm_min))
-
-
-
-            if sum > 0:
+            else :
                 maxx = max(listaDePesos)
+                ind = listaDePesos.index(maxx)
 
-                if sum + maxx > 1440:
-                    ind = listaDePesos.index(maxx)
-                    ListProc.remove(ListProc[ind])
-                    listaDePesos.remove(maxx)
-                    print(len(listaDePesos))
-                else  :
-                    ind = listaDePesos.index(maxx)
+                if not cruzan(ProcedimientosARealizar[len(ProcedimientosARealizar)-1],ListProc[ind]):
                     ProcedimientosARealizar.append(ListProc[ind])
                     ListProc.remove(ListProc[ind])
                     listaDePesos.remove(maxx)
                     sum = sum + maxx
-
-            if cruzan(ListProc[ind], ProcedimientosARealizar[len(ProcedimientosARealizar) - 1]):
-                print(str(sum) + "cruzan")
-            else:
-                ProcedimientosARealizar.append(ListProc[ind])
-            #    ListProc.remove(ListProc[ind])
-            #    listaDePesos.remove(maxx)
-            #    sum = sum + maxx
+                else:
+                    ListProc.remove(ListProc[ind])
+                    listaDePesos.remove(maxx)
 
 
             #print(HorasAminutos(ProcedimientosARealizar[i][1].tm_hour, ProcedimientosARealizar[i][1].tm_min))
@@ -212,8 +189,7 @@ class panelProcedimientos(wx.Panel):
                     info += str(ProcedimientosARealizar[i][j].tm_hour) + ':' + str(ProcedimientosARealizar[i][j].tm_min) +'             \t'
             info += '\n'
         self.logger.AppendText(info)
-    def CLickVoraz(self, event):
-        self.logger.SetValue('Hola, aqui va la solucion voraz del problema')
+
     def ClickDinamico(self,event):
         self.logger.SetValue('Hola, aqui va la solucion dinamica del problema')
 """
