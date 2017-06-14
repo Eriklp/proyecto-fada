@@ -243,6 +243,30 @@ def calcTiempo(solucion):
         	tiempo = taux
     return tiempo
 
+def genSol(ini,fin):
+    sol = []
+
+    for i in range(1,fin+1,1):
+        sol.push(i)
+
+    return sol
+
+def generarSol(escritor, libro, arreglo):
+    global posiblesSol
+    if(not(escritor==0 and libro!=0) and not(escritor!=0 and libro==0)):
+        if(escritor==0 and libro==0):
+            posiblesSol.push(arreglo)
+        else:
+            for i in range(1,libro+1,1):
+                arregloAux = arreglo
+                solAux = genSol(i,libro)
+                arregloAux.push(solAux)
+                generarSol(escritor-1,i-1,arregloAux)
+
+
+
+
+
 
 class panelLibros(wx.Panel):
     def __init__(self, parent):
@@ -270,6 +294,8 @@ class panelLibros(wx.Panel):
         global cantEscritores
         global cantLibros
         global posiblesSol
+
+
         self.logger.SetValue('Se mostrara la solucion ingenua del problema')
     def CLickVoraz(self,event):
 	    self.logger.SetValue('Se mostrara la solucion voraz del problema')
@@ -313,8 +339,7 @@ frame = wx.Frame(None, title="Proyecto de FADA", size=(780,520))
 # Creamos el contenedor de pestañas
 nb = wx.Notebook(frame)
 # Añadimos los paneles con Addpage
-nb.AddPage(panelLibros(nb), "Copia de libros")
 nb.AddPage(panelProcedimientos(nb), "Sala operaciones")
-
+nb.AddPage(panelLibros(nb), "Copia de libros")
 frame.Show()
 app.MainLoop()
