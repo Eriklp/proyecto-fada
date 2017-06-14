@@ -221,6 +221,52 @@ SE DEFINEN LA INTERFAZ Y METODOS DEl PANEL LIBROS
 """
 arrayPaginas=[]
 arrayNombres=[]
+cantEscritores = 0
+cantLibros = 0
+posiblesSol = []
+solLibros = []
+
+def suma(arreglo):
+    global arrayPaginas
+    summ = 0
+    for i in arreglo:
+        summ = summ + arrayPaginas[int(i)-1]
+    return summ
+
+def calcTiempo(solucion):
+    global solLibros
+    tiempo = 0
+    for i in solucion:
+        taux = suma(i)
+        if(taux > tiempo):
+        	solLibros = i
+        	tiempo = taux
+    return tiempo
+
+def genSol(ini,fin):
+    sol = []
+
+    for i in range(1,fin+1,1):
+        sol.push(i)
+
+    return sol
+
+def generarSol(escritor, libro, arreglo):
+    global posiblesSol
+    if(not(escritor==0 and libro!=0) and not(escritor!=0 and libro==0)):
+        if(escritor==0 and libro==0):
+            posiblesSol.push(arreglo)
+        else:
+            for i in range(1,libro+1,1):
+                arregloAux = arreglo
+                solAux = genSol(i,libro)
+                arregloAux.push(solAux)
+                generarSol(escritor-1,i-1,arregloAux)
+
+
+
+
+
 
 class panelLibros(wx.Panel):
     def __init__(self, parent):
@@ -243,7 +289,19 @@ class panelLibros(wx.Panel):
 
 
     def ClickIngenuo(self,event):
-	    self.logger.SetValue('Se mostrara la solucion ingenua del problema')
+        global arrayNombres
+        global cantEscritores
+        global cantLibros
+        global solLibros
+        global posiblesSol
+
+        generarSol(cantEscritores, cantLibros, [])
+        tiempo = calcTiempo(posiblesSol)
+
+
+
+
+        self.logger.SetValue('Se mostrara la solucion ingenua del problema'+tiempo)
     def CLickVoraz(self,event):
 	    self.logger.SetValue('Se mostrara la solucion voraz del problema')
     def ClickDinamico(self,event):
@@ -254,6 +312,8 @@ class panelLibros(wx.Panel):
     def ClickCargar(self,event):
         archivo = open("infoLibros.txt","r")
         linea1 = archivo.readline()
+        global cantEscritores
+        global cantLibros
         cantEscritores = linea1.split(" ")[0]
         cantLibros = linea1.split(" ")[1]
         global arrayPaginas
@@ -266,7 +326,7 @@ class panelLibros(wx.Panel):
             arrayNombres.append(i.split(" ")[0])
             arrayPaginas.append(int(i.split(" ")[1]))
 
-        carga = "La informción cargada es la siguiente:\nCantidad de Escritores: "+cantEscritores+"\nCantidad de Libros: "+ cantLibros
+        carga = "La información cargada es la siguiente:\nCantidad de Escritores: "+cantEscritores+"\nCantidad de Libros: "+ cantLibros
 
         for i in range(0,len(arrayNombres)):
             carga = carga + "Titulo del libro: " + arrayNombres[i] + "--Cantidad de paginas: "+ str(arrayPaginas[i])+"\n"
