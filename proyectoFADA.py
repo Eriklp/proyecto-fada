@@ -289,14 +289,19 @@ class panelLibros(wx.Panel):
 
 
     def ClickIngenuo(self,event):
-    	global arrayPaginas
         global arrayNombres
         global cantEscritores
         global cantLibros
+        global solLibros
         global posiblesSol
 
+        generarSol(cantEscritores, cantLibros, [])
+        tiempo = calcTiempo(posiblesSol)
 
-        self.logger.SetValue('Se mostrara la solucion ingenua del problema')
+
+
+
+        self.logger.SetValue('Se mostrara la solucion ingenua del problema'+tiempo)
     def CLickVoraz(self,event):
 	    self.logger.SetValue('Se mostrara la solucion voraz del problema')
     def ClickDinamico(self,event):
