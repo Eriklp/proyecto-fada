@@ -246,24 +246,24 @@ def calcTiempo(solucion):
 def genSol(ini,fin):
     sol = []
 
-    for i in range(1,fin+1,1):
-        sol.push(i)
-
+    for i in range(ini,fin+1,1):
+        sol.append(i)
     return sol
 
-def generarSol(escritor, libro, arreglo):
+def generarSol(escritor, libro, array):
     global posiblesSol
     if(not(escritor==0 and libro!=0) and not(escritor!=0 and libro==0)):
         if(escritor==0 and libro==0):
-            posiblesSol.push(arreglo)
+            posiblesSol.append(array)
+
         else:
-            for i in range(1,libro+1,1):
-                arregloAux = arreglo
-                solAux = genSol(i,libro)
-                arregloAux.push(solAux)
-                generarSol(escritor-1,i-1,arregloAux)
-
-
+            iterator = 1
+            while(iterator<=libro):
+                arregloAux = array
+                solAux = genSol(iterator,libro)
+                arregloAux.append(solAux)
+                generarSol(escritor-1,iterator-1,arregloAux)
+                iterator = iterator + 1
 
 
 
@@ -294,14 +294,13 @@ class panelLibros(wx.Panel):
         global cantLibros
         global solLibros
         global posiblesSol
+        generarSol(int(cantEscritores), int(cantLibros), [])
+        #tiempo = calcTiempo(posiblesSol)
 
-        generarSol(cantEscritores, cantLibros, [])
-        tiempo = calcTiempo(posiblesSol)
+        print posiblesSol
 
 
-
-
-        self.logger.SetValue('Se mostrara la solucion ingenua del problema'+tiempo)
+        self.logger.SetValue('Se mostrara la solucion ingenua del problema')
     def CLickVoraz(self,event):
 	    self.logger.SetValue('Se mostrara la solucion voraz del problema')
     def ClickDinamico(self,event):
