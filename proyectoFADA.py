@@ -9,6 +9,7 @@ ListProc = []
 def HorasAminutos(hora, minutos):
     resultado = (hora * 60) + minutos
     return resultado
+
 def cruzan(proc1, proc2):
     minHIproc1 = HorasAminutos(proc1[1].tm_hour, proc1[1].tm_min)
     minHFproc1 = HorasAminutos(proc1[2].tm_hour, proc1[2].tm_min)
@@ -22,6 +23,7 @@ def cruzan(proc1, proc2):
     else:
         var = False
     return var
+
 class panelProcedimientos(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
@@ -131,8 +133,12 @@ class panelProcedimientos(wx.Panel):
                 self.buttonInge.Enable()
                 self.buttonVor.Enable()
                 self.buttonDim.Enable()
+
     def ClickIngenuo(self, event):
         self.logger.SetValue('solucion ingenua: \n')
+
+
+
     def ClickVoraz(self, event):
         self.logger.SetValue('solucion voraz: \n')
         infoProc = '[nombre_proc] \t [hora_ini] \t [hora_fin] \n'
@@ -153,7 +159,8 @@ class panelProcedimientos(wx.Panel):
         arregloauxconlogica = []
         sum = 0
         maxx = 0
-
+        aux = 0
+        aux2 = 0
         while sum <= 1440 and len(listaDePesos)>0:
             print(sum)
 
@@ -169,17 +176,24 @@ class panelProcedimientos(wx.Panel):
                 maxx = max(listaDePesos)
                 ind = listaDePesos.index(maxx)
 
-                if not cruzan(ProcedimientosARealizar[len(ProcedimientosARealizar)-1],ListProc[ind]):
+                if not cruzan(ProcedimientosARealizar[aux],ListProc[ind]):
                     ProcedimientosARealizar.append(ListProc[ind])
                     ListProc.remove(ListProc[ind])
                     listaDePesos.remove(maxx)
                     sum = sum + maxx
-                else:
-                    ListProc.remove(ListProc[ind])
-                    listaDePesos.remove(maxx)
+                    aux = len(ProcedimientosARealizar) - 1
+                else :
+                    if not cruzan(ListProc[ind],ProcedimientosARealizar[aux2]):
+                        ProcedimientosARealizar.append(ListProc[ind])
+                        ListProc.remove(ListProc[ind])
+                        listaDePesos.remove(maxx)
+                        sum = sum + maxx
+                        aux2 = len(ProcedimientosARealizar)-1
+                    else:
+                        ListProc.remove(ListProc[ind])
+                        listaDePesos.remove(maxx)
 
 
-            #print(HorasAminutos(ProcedimientosARealizar[i][1].tm_hour, ProcedimientosARealizar[i][1].tm_min))
         info = '[nombre_proc] \t [hora_ini] \t [hora_fin] \n'
         for i in range(len(ProcedimientosARealizar)):
             for j in range(3):
