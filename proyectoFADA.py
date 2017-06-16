@@ -6,10 +6,38 @@ import time
 np = 0
 numeroProcedimientos = 0
 ListProc = []
+
+#def quicksort(lista, izq, der):
+#    i = izq
+#    j=der
+#    x=HorasAminutos(lista[(izq + der)/2][2].tm_hour, lista[(izq + der) / 2][2].tm_min)
+#
+#    while( i <= j ):
+#        while HorasAminutos(lista[i][2].tm_hour, lista[i][2].tm_min)<x and j<=der:
+#            i=i+1
+#        while x<HorasAminutos(lista[j][2].tm_hour, lista[j][2].tm_min) and j>izq:
+#            j=j-1
+#        if i<=j:
+#            aux = HorasAminutos(lista[i][2].tm_hour, lista[i][2].tm_min); lista[i] = lista[j]; lista[j][2].tm_hour, lista[j][2].tm_min = MinutosAhoras(aux);
+#            i=i+1;  j=j-1;
+#
+#        if izq < j:
+#        quicksort( lista, izq, j );
+#    if i < der:
+#        quicksort( lista, i, der );
+#
+
 def HorasAminutos(hora, minutos):
     resultado = (hora * 60) + minutos
     return resultado
 
+def MinutosAhoras(minutos):
+    horas = minutos // 60
+    minutos = minutos % 60
+    return horas, minutos
+
+s, w = MinutosAhoras(110)
+print s, w
 def cruzan(proc1, proc2):
     minHIproc1 = HorasAminutos(proc1[1].tm_hour, proc1[1].tm_min)
     minHFproc1 = HorasAminutos(proc1[2].tm_hour, proc1[2].tm_min)
@@ -188,6 +216,7 @@ class panelProcedimientos(wx.Panel):
                     infoProc += str(ListProc[i][j].tm_hour) + ':' + str(ListProc[i][j].tm_min) +'             \t'
             infoProc += '\n'
         self.logger.AppendText(infoProc)
+        tiempo_inicio = time.time()
         listaDePesos = []
         for i in range(numeroProcedimientos):
             peso = HorasAminutos(ListProc[i][2].tm_hour, ListProc[i][2].tm_min) - HorasAminutos(ListProc[i][1].tm_hour, ListProc[i][1].tm_min)
@@ -240,9 +269,14 @@ class panelProcedimientos(wx.Panel):
                     info += str(ProcedimientosARealizar[i][j].tm_hour) + ':' + str(ProcedimientosARealizar[i][j].tm_min) +'             \t'
             info += '\n'
         self.logger.AppendText(info)
+        tiempo_fin = time.time()
+        tiempo_ejecucion = tiempo_fin - tiempo_inicio
+        self.logger.AppendText("El tiempo de ejecucion para esta solucion voraz fue de: " +  str(tiempo_ejecucion))
 
     def ClickDinamico(self,event):
         self.logger.SetValue('Hola, aqui va la solucion dinamica del problema')
+        listahorasfin = [1440]
+
 """
 SE DEFINEN LA INTERFAZ Y METODOS DEl PANEL LIBROS
 """
@@ -291,9 +325,6 @@ def generarSol(escritor, libro, array):
                 arregloAux.append(solAux)
                 generarSol(escritor-1,iterator-1,arregloAux)
                 iterator = iterator + 1
-
-
-
 
 class panelLibros(wx.Panel):
     def __init__(self, parent):
