@@ -7,25 +7,24 @@ np = 0
 numeroProcedimientos = 0
 ListProc = []
 auxs = []
-#def quicksort(lista, izq, der):
-#    i = izq
-#    j=der
-#    x=HorasAminutos(lista[(izq + der)/2][2].tm_hour, lista[(izq + der) / 2][2].tm_min)
-#
-#    while( i <= j ):
-#        while HorasAminutos(lista[i][2].tm_hour, lista[i][2].tm_min)<x and j<=der:
-#            i=i+1
-#        while x<HorasAminutos(lista[j][2].tm_hour, lista[j][2].tm_min) and j>izq:
-#            j=j-1
-#        if i<=j:
-#            aux = HorasAminutos(lista[i][2].tm_hour, lista[i][2].tm_min); lista[i] = lista[j]; lista[j][2].tm_hour, lista[j][2].tm_min = MinutosAhoras(aux);
-#            i=i+1;  j=j-1;
-#
-#        if izq < j:
-#        quicksort( lista, izq, j );
-#    if i < der:
-#        quicksort( lista, i, der );
-#
+def quicksort(lista, izq, der):
+    i = izq
+    j = der
+    x = lista[(izq + der)/2][2]
+    while i < j :
+        while lista[i][2] < x and j <= der:
+            i=i+1
+        while lista[j][2] > x and j > izq:
+            j=j-1
+        if i <= j:
+            aux = lista[i][2]; lista[i][2] = lista[j][2]; lista[j][2] = aux;
+            i=i+1;  j=j-1;
+
+        if izq < j:
+            quicksort( lista, izq, j );
+        if i < der:
+            quicksort( lista, i, der );
+
 
 def HorasAminutos(hora, minutos):
     resultado = (hora * 60) + minutos
@@ -276,9 +275,14 @@ class panelProcedimientos(wx.Panel):
         tiempo_ejecucion = tiempo_fin - tiempo_inicio
         self.logger.AppendText("El tiempo de ejecucion para esta solucion voraz fue de: " +  str(tiempo_ejecucion))
 
-
     def ClickDinamico(self,event):
         self.logger.SetValue('Hola, aqui va la solucion dinamica del problema')
+        ListProcMin = []
+        for i in range(numeroProcedimientos):
+            ListProcMin.insert(i, list((i, HorasAminutos(ListProc[i][1].tm_hour, ListProc[i][1].tm_min), HorasAminutos(ListProc[i][2].tm_hour, ListProc[i][2].tm_min))))
+        print(ListProcMin)
+        quicksort(ListProcMin, 0, (len(ListProcMin) - 1))
+        print(ListProcMin)
         listaBeneficios = []
         listaCostos = []
         #se llena la lista de beneficios con las duraciones de cada procedimiento
@@ -292,6 +296,7 @@ class panelProcedimientos(wx.Panel):
         listaCostos.append(0)
         for i in range(1, numeroProcedimientos):
             listaCostos.insert(i, maximo((listaBeneficios[i - 1] + listaCostos[i - 1]), listaCostos[i - 1], (i - 1)))
+        print(listaCostos)
 """
 SE DEFINEN LA INTERFAZ Y METODOS DEl PANEL LIBROS
 """
