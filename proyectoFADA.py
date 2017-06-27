@@ -25,6 +25,17 @@ def quicksort(lista, izq, der):
         if i < der:
             quicksort( lista, i, der );
 
+def insertionSort(alist):
+   for index in range(1,len(alist)):
+
+     currentvalue = alist[index][2]
+     position = index
+     print(alist[index][2])
+     while position>0 and alist[position-1][2] > currentvalue:
+         alist[position] = alist[position-1]
+         position = position-1
+
+     alist[position][2]=currentvalue
 
 def HorasAminutos(hora, minutos):
     resultado = (hora * 60) + minutos
@@ -34,7 +45,6 @@ def MinutosAhoras(minutos):
     horas = minutos // 60
     minutos = minutos % 60
     return horas, minutos
-
 def cruzan(proc1, proc2):
     minHIproc1 = HorasAminutos(proc1[1].tm_hour, proc1[1].tm_min)
     minHFproc1 = HorasAminutos(proc1[2].tm_hour, proc1[2].tm_min)
@@ -166,7 +176,6 @@ class panelProcedimientos(wx.Panel):
                 self.buttonInge.Enable()
                 self.buttonVor.Enable()
                 self.buttonDim.Enable()
-
     def ClickIngenuo(self, event):
         self.logger.SetValue('solucion ingenua: \n')
 
@@ -209,7 +218,6 @@ class panelProcedimientos(wx.Panel):
                     info += str(ProcedimientosARealizar[i][j].tm_hour) + ':' + str(ProcedimientosARealizar[i][j].tm_min) +'             \t'
             info += '\n'
         self.logger.AppendText(info)
-
     def ClickVoraz(self, event):
         self.logger.SetValue('solucion voraz: \n')
         infoProc = '[nombre_proc] \t [hora_ini] \t [hora_fin] \n'
@@ -274,14 +282,14 @@ class panelProcedimientos(wx.Panel):
         tiempo_fin = time.time()
         tiempo_ejecucion = tiempo_fin - tiempo_inicio
         self.logger.AppendText("El tiempo de ejecucion para esta solucion voraz fue de: " +  str(tiempo_ejecucion))
-
     def ClickDinamico(self,event):
         self.logger.SetValue('Hola, aqui va la solucion dinamica del problema')
         ListProcMin = []
         for i in range(numeroProcedimientos):
             ListProcMin.insert(i, list((i, HorasAminutos(ListProc[i][1].tm_hour, ListProc[i][1].tm_min), HorasAminutos(ListProc[i][2].tm_hour, ListProc[i][2].tm_min))))
         print(ListProcMin)
-        quicksort(ListProcMin, 0, (len(ListProcMin) - 1))
+        #quicksort(ListProcMin, 0, (len(ListProcMin) - 1))
+        ListProcMin.sort(key =  lambda x: x[2])
         print(ListProcMin)
         listaBeneficios = []
         listaCostos = []
